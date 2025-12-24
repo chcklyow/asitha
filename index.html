@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>React Saluran WhatsApp</title>
+</head>
+<body style="font-family:sans-serif; padding:30px">
+
+<h2>REACT SALURAN WHATSAPP BY @danar11._</h2>
+
+<input id="url" placeholder="Link WhatsApp Channel"
+  style="width:100%; padding:10px"><br><br>
+
+<input id="emoji" placeholder="Emoji 😭🔥😂"
+  style="width:100%; padding:10px"><br><br>
+
+<button onclick="react()">GAS ⚡</button>
+<button onclick="cekCoin()">Cek Coin</button>
+
+<p id="status"></p>
+<p id="coin"></p>
+
+<script>
+async function react() {
+  document.getElementById("status").innerText = "⏳ processing...";
+  const r = await fetch("/api/react", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      url: document.getElementById("url").value,
+      emoji: document.getElementById("emoji").value
+    })
+  });
+  const d = await r.json();
+  document.getElementById("status").innerText =
+    d.success ? "✅ sukses" : "❌ gagal";
+}
+
+async function cekCoin() {
+  const r = await fetch("/api/me");
+  const d = await r.json();
+  document.getElementById("coin").innerText = "💰 Coin: " + d.coins;
+}
+</script>
+
+</body>
+</html>
