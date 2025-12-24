@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>React Saluran WhatsApp</title>
+  <style>
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      padding: 30px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      font-size: 16px;
+    }
+    button {
+      cursor: pointer;
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+    .row button {
+      width: 50%;
+    }
+    #status {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>REACT SALURAN WHATSAPP BY @danar11._</h1>
+
+  <input
+    id="url"
+    placeholder="Link post channel WhatsApp"
+  />
+
+  <input
+    id="emoji"
+    placeholder="Emoji (contoh: 😭🔥😂)"
+    value="🔥"
+  />
+
+  <div class="row">
+    <button onclick="gas()">GAS ⚡</button>
+    <button onclick="cekCoin()">Cek Coin</button>
+  </div>
+
+  <div id="status"></div>
+  <div id="coin"></div>
+
+<script>
+async function gas() {
+  const url = document.getElementById("url").value;
+  const emoji = document.getElementById("emoji").value;
+  const status = document.getElementById("status");
+
+  if (!url || !emoji) {
+    status.innerText = "❌ URL dan emoji wajib diisi";
+    return;
+  }
+
+  status.innerText = "⏳ processing...";
+
+  try {
+    const res = await fetch("/api/react", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ url, emoji })
+    });
+
+    const data = await res.json();
+
+    status.innerText = data.success
+      ? "✅ sukses"
+      : "❌ gagal";
+
+  } catch (e) {
+    status.innerText = "❌ error: " + e.message;
+  }
+}
+
+async function cekCoin() {
+  const coin = document.getElementById("coin");
+  coin.innerText = "⏳ cek coin...";
+
+  try {
+    const res = await fetch("/api/me");
+    const data = await res.json();
+    coin.innerText = "💰 Coin: " + data.coins;
+  } catch (e) {
+    coin.innerText = "❌ gagal cek coin";
+  }
+}
+</script>
+
+</body>
+</html>
